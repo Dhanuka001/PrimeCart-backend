@@ -5,6 +5,7 @@ const app = express();
 
 // Import Routes
 const authRoutes = require("./routes/auth");
+const productRoutes = require("./routes/product");
 
 require("dotenv").config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 
 // Mount Routes
 app.use("/api/auth", authRoutes); 
+app.use("/api/product", productRoutes);
 
 
 const PORT = process.env.PORT || 5000;
