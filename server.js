@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require("path");
 const { sequelize } = require("./models");
 const app = express();
 
@@ -12,6 +13,9 @@ require("dotenv").config();
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// Serve static files from the "uploads" directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Mount Routes
 app.use("/api/auth", authRoutes); 
