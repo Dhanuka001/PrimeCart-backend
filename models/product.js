@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Product.belongsTo(models.Category, { foreignKey: 'categoryId', as: 'category' });
       Product.hasMany(models.ProductAttribute, { foreignKey: 'productId', as: 'attributes' });
+      Product.hasMany(models.ProductImage, { foreignKey: 'productId', as: 'images' });
     }
   }
 
@@ -16,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       price: DataTypes.DECIMAL(10, 2),
       stock: DataTypes.INTEGER,
       categoryId: DataTypes.INTEGER,
-      image: DataTypes.STRING,
       isDeleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      isTrending: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      }
     },
     {
       sequelize,
