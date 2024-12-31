@@ -28,7 +28,7 @@ module.exports = {
     // Create 150 products dynamically
     const products = [];
     const productAttributes = [];
-    const placeholderImage = 'upload/product-placeholder.jpg';
+    const productImages = [];
 
     for (let i = 1; i <= 150; i++) {
       const categoryIndex = (i - 1) % insertedCategories.length;
@@ -41,7 +41,6 @@ module.exports = {
         price: (Math.random() * 100).toFixed(2), // Random price between 0 and 100
         stock: Math.floor(Math.random() * 200) + 1, // Random stock between 1 and 200
         categoryId: category.id, // Use the fetched category ID
-        image: placeholderImage,
         isDeleted: false,
         isFavourite: Math.random() > 0.7, // Randomly mark as favorite (30% chance)
         createdAt: new Date(),
@@ -72,6 +71,14 @@ module.exports = {
           updatedAt: new Date(),
         }
       );
+
+      // Assign placeholder image for all products
+      productImages.push({
+        productId: i,
+        imageUrl: `uploads/product-placeholder.jpg`, // Default placeholder image URL
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
     }
 
     // Insert products
@@ -91,10 +98,20 @@ module.exports = {
 
     // Insert product attributes
     await queryInterface.bulkInsert('ProductAttributes', finalProductAttributes);
+
+    // Map images to the correct product IDs
+    const finalProductImages = productImages.map((image, index) => ({
+      ...image,
+      productId: insertedProducts[index % insertedProducts.length].id,
+    }));
+
+    // Insert product images
+    await queryInterface.bulkInsert('ProductImages', finalProductImages);
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Delete all attributes, products, and categories
+    // Delete all images, attributes, products, and categories
+    await queryInterface.bulkDelete('ProductImages', null, {});
     await queryInterface.bulkDelete('ProductAttributes', null, {});
     await queryInterface.bulkDelete('Products', null, {});
     await queryInterface.bulkDelete('Categories', null, {});

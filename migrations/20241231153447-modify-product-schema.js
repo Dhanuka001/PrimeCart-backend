@@ -2,10 +2,10 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Remove the `image` column from the Product table
+    // Remove `image` column from Products table
     await queryInterface.removeColumn('Products', 'image');
 
-    // Create the ProductImages table
+    // Create ProductImages table
     await queryInterface.createTable('ProductImages', {
       id: {
         allowNull: false,
@@ -38,12 +38,12 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Re-add the `image` column to the Product table
+    // Re-add `image` column to Products table
     await queryInterface.addColumn('Products', 'image', {
       type: Sequelize.STRING,
     });
 
-    // Drop the ProductImages table
+    // Drop ProductImages table
     await queryInterface.dropTable('ProductImages');
   },
 };
