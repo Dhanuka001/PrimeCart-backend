@@ -11,6 +11,12 @@ router.post("/register", async (req, res) => {
     const {name , email , password , role} = req.body;
     console.log(req.body);
     try{
+
+        const existingUser =  await User.findOne({ where : { email } })
+        if(existingUser) return res.status(400).json({error : "User already exists"});
+
+        if(password.length < 8) return res.status(400).json({error : "Password must be at least 8 characters"});
+        
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({name, email, password: hashedPassword, role});
 
